@@ -1,12 +1,30 @@
 const http = require('http');
 const socketIo = require('socket.io');
-const cors = require("cors");
 
 // Create a basic HTTP server
 const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('Socket.IO chat room server is running\n');
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', 'https://numberonepoker.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+  // Handle OPTIONS request for CORS preflight
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  // Handle other requests
+  if (req.url === '/socket.io/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Socket.IO endpoint');
+  } else {
+    res.writeHead(404);
+    res.end('Not Found');
+  }
 });
+
 // Attach Socket.IO to the server and enable CORS
 const io = socketIo(server, {
   cors: {
@@ -15,11 +33,6 @@ const io = socketIo(server, {
   }
 });
 let users = [];
-
-// Use CORS middleware
-app.use(cors({
-  origin: "https://numberonepoker.vercel.app/" // Replace with your client URL
-}));
 
 io.on('connection', (socket) => {
   socket.on('joinRoom', (room , username) => {
