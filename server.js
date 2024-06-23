@@ -1,5 +1,6 @@
 const http = require('http');
 const socketIo = require('socket.io');
+const cors = require("cors");
 
 // Create a basic HTTP server
 const server = http.createServer((req, res) => {
@@ -11,7 +12,6 @@ const io = socketIo(server, {
   cors: {
     origin: "https://numberonepoker.vercel.app/", // Allow all origins
     methods: ["GET", "POST"], // Allow specific HTTP methods
-    credentials: true
   }
 });
 let users = [];
