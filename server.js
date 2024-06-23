@@ -9,7 +9,7 @@ const server = http.createServer((req, res) => {
 // Attach Socket.IO to the server and enable CORS
 const io = socketIo(server, {
   cors: {
-    origin: "*", // Allow all origins
+    origin: "https://numberonepoker.vercel.app/", // Allow all origins
     methods: ["GET", "POST"], // Allow specific HTTP methods
     credentials: true
   }
