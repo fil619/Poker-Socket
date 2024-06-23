@@ -16,7 +16,10 @@ const io = socketIo(server, {
 });
 let users = [];
 
-
+// Use CORS middleware
+app.use(cors({
+  origin: "https://numberonepoker.vercel.app/" // Replace with your client URL
+}));
 
 io.on('connection', (socket) => {
   socket.on('joinRoom', (room , username) => {
@@ -28,6 +31,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('setScore', ({ room, msg }) => {
+    let user = users.find(el => el.id === socket.id)
+    if (user) {
+      user.score = msg
+    }
     socket.emit('setPersonalScore', {score: msg , user: socket.id});
     socket.to(room).emit('userScore', {score: msg , user: socket.id});
   });
